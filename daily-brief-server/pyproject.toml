@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "daily-brief-server"
+version = "0.1.0"
+description = ""
+authors = ["Ben Doan <ben@bendoan.me>"]
+readme = "README.md"
+packages = [{include = "daily_brief_server"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+uvicorn = "^0.18.3"
+black = "^22.8.0"
+fastapi = "^0.82.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
