@@ -7,6 +7,8 @@
 
 import datetime
 import json
+import os
+import shutil
 import sys
 from functools import reduce
 from urllib.parse import urljoin
@@ -16,11 +18,18 @@ from requests.auth import HTTPBasicAuth
 
 USER_AGENT = "DailyBrief/0.1 by coursesuno"
 REDDIT_COM = "https://reddit.com"
-OUTPUT_FNAME = "posts.json"
+OUTPUT_FNAME = "reddit-posts.json"
 
 subreddits = [
-    "all",
+    "onebag",
     "spacexlounge",
+    "spacex",
+    "omaha",
+    "ExperiencedDevs",
+    "omahatech",
+    "solotravel",
+    "ultralight",
+    "comics",
 ]
 
 def login():
@@ -57,15 +66,38 @@ def print_ratelimits(h: dict):
 
 
 def get_listing(subreddit: str, count: int = 10):
-    url = f"https://www.reddit.com/r/{subreddit}/top/.json?count={count}&t=day"
+    url = f"https://www.reddit.com/r/{subreddit}/top/.json?count={count}&t=day&limit=10"
     r = get(url)
     return r.json()
 
 
 def get_post(listing_post: dict):
-    url = reduce(urljoin, [REDDIT_COM, listing_post["data"]["permalink"], ".json"])
+    url = reduce(urljoin, [REDDIT_COM, listing_post["data"]["permalink"], ".json?limit=10000&depth=100"])
     r = get(url)
     return r.json()
+
+
+def download_images(posts: list):
+    for post in posts:
+        post_data = post[0]['data']['children'][0]['data']
+        url = post_data['url']
+        thumb = post_data['thumbnail']
+
+        if thumb in ['self', 'default']:
+            continue
+
+        if '.png' in url or '.jpg' in url or '.jpeg' in url:
+            download_image(url)
+        download_image(thumb)
+
+def download_image(url: str):
+    r = requests.get(url, stream=True)
+    path = os.path.join("..", "data", "img", url.split("/")[-1])
+    if r.status_code == 200:
+        with open(path, 'wb') as f:
+            r.raw.decode_content = True
+            shutil.copyfileobj(r.raw, f)
+
 
 
 def main():
@@ -77,11 +109,16 @@ def main():
     for subreddit in subreddits:
         eprint(f"Fetching top posts from /r/{subreddit}")
         listing = get_listing(subreddit)
+        posts = []
         for listing_post in listing["data"]["children"]:
-            post = get_post(listing_post)
-            out["subreddits"][subreddit] = post
+            posts.append(get_post(listing_post))
 
-    with open(OUTPUT_FNAME, "w+") as f:
+        download_images(posts)
+
+        out["subreddits"][subreddit] = posts
+
+    output_path = os.path.join("..", "data", OUTPUT_FNAME)
+    with open(output_path, "w+") as f:
         json.dump(out, f)
 
 
