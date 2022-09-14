@@ -1,36 +1,48 @@
 <script lang="ts">
 	import Comment from '$lib/Comment.svelte';
 	import {marked} from 'marked';
+	import { seenPosts } from '$lib/stores.js';
 
 	export let post;
 
 	let is_open = false;
 
-	const url = post[0].data.children[0].data.url;
+	const data = post[0].data.children[0].data;
+	console.log(data);
+	const url = data.url;
+	const id = data.id;
 
-	const selftext = post[0].data.children[0].data.selftext;
-	const selftext_html = marked.parse(selftext)
+	const selftext = data.selftext;
+	const selftext_html = marked.parse(selftext || "")
 
 	const is_img = url.includes(".jpg") || url.includes(".png") || url.includes("jpeg")
-	console.log(post)
 
-
-	function handleClick() {
+	function handleToggle() {
 		is_open = is_open ? false : true;
+		$seenPosts[id] = true;
 	}
 </script>
 
 <div class="comments">
-	<h3>
-		<span class="toggle" on:click={handleClick}>
+	<h3 class:seen={$seenPosts[id]}>
+		<span class="toggle" on:click={handleToggle}>
 			{#if is_open} [-] {:else} [+] {/if}
 		</span>
-		{post[0].data.children[0].data.title}
+		{#if data.url && !is_img && !selftext}
+			<a href="{url}">{data.title}</a>
+		{:else}
+			{data.title}
+		{/if}
 		{#if is_img}[i]{/if}
-	</h3>
+</h3>
 	{#if is_open}
+		<div class="meta">
+				&#11014;{data.score} - {data.author}
+		</div>
 		{#if is_img}
-			<img class="img" src="{url}" />
+			<a href="{url}">
+				<img class="img" src="{url}" />
+			</a>
 		{:else}
 			{@html selftext_html}
 		{/if}
@@ -47,11 +59,22 @@
 }
 
 .img {
-	max-width:70vw;
+	max-width: 70vw;
+	max-height: 70vh;
 }
 
-pre {
-	white-space: pre-wrap
+.meta {
+	border: 1px solid #ddd;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+.seen {
+	color: #a3d;
+}
+
+.seen a:link {
+	color: #a3d;
 }
 </style>
 

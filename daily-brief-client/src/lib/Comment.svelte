@@ -3,12 +3,13 @@
 	import {marked} from 'marked';
 
 	export let comment;
+	const data = comment.data;
 
-	const depth = comment?.data?.depth ?? 0;
+	const depth = data?.depth ?? 0;
 	let is_open = true;
 
-	const body = comment.data.body;
-	const body_html = marked.parse(body)
+	const body = data.body;
+	const body_html = marked.parse(body || "")
 
 	function handleClick() {
 		is_open = is_open ? false : true;
@@ -18,19 +19,18 @@
 <section class="depth-{depth}">
 	<div>
 		<div class="comment">
-			<div class="body">
-				{#if comment?.data?.body}
-					<span class="toggle" on:click={handleClick}>
-						{#if is_open} [-] {:else} [+] {/if}
-					</span>
-					{@html body_html}
-				{/if}
+			<div class="meta">
+				<span class="toggle" on:click={handleClick}>
+					{#if is_open} [-] {:else} [+] {/if}
+				</span>
+				{data.author}
 			</div>
 
 			{#if is_open}
-				{#if comment?.data?.replies}
+				<div class="body">{@html body_html}</div>
+				{#if data?.replies}
 					<div class="replies">
-						{#each comment.data.replies.data.children as reply}
+						{#each data.replies.data.children as reply}
 							<Comment comment={reply} />
 						{/each}
 					</div>
@@ -42,12 +42,12 @@
 
 <style>
 .comment {
-	margin-bottom: 10px;
-	padding: 10px;
+	margin-bottom: 2px;
+	padding: 5px;
 }
 
-.body {
-	margin-bottom: 10px;
+.body :global(p) {
+	margin: 5px;
 }
 
 .toggle {
@@ -55,7 +55,12 @@
 	user-select: none;
 }
 
+.meta {
+	border-bottom: 1px solid black;
+}
+
 .depth-0 {
+	margin-bottom: 10px;
 	margin-left: 0;
 	background-color: #fff;
 }

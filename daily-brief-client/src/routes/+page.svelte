@@ -1,26 +1,42 @@
 <script lang="ts">
 	/*
 		TODO:
-		- Read markers
 		- Better post nav
 		- Author/link/comment count
 		- HN support
+    - Show site
+		- One post at a time
+		- marker for op
 	*/
 
 	import Comment from '$lib/Comment.svelte';
 	import Post from '$lib/Post.svelte';
+	import { reset, currentTime } from '$lib/stores.js';
 
 	import { onMount } from 'svelte';
 
+	const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+
 	let redditData = null;
+	let time = null;
 
 	onMount(async () => {
     fetchAndRedditData();
   });
 
+
 	async function fetchAndRedditData() {
-    const req = await fetch('http://localhost:8000');
+		const req = await fetch('http://localhost:8000/api/data');
 		redditData = await req.json();
+		const timeStr = redditData.time;
+		time = new Date(timeStr);
+
+		if (!$currentTime || timeStr > $currentTime) {
+			reset();
+			$currentTime = timeStr
+		}
   }
 
 
@@ -32,11 +48,12 @@
 </svelte:head>
 
 <section>
-	<h1>Foobarbaz</h1>
+	{#if time}
+	<h1>{months[time.getMonth()]}, {days[time.getDay()]} {time.getDate()}</h1>
+	{/if}
 	{#if redditData}
-		<div>{redditData.time}</div>
 		{#each Object.entries(redditData.subreddits) as [subreddit, subredditData]}
-			<h2>{subreddit}</h2>
+			<h3>{subreddit}</h3>
 
 			{#each subredditData as post}
 				<Post post={post} />

@@ -21,15 +21,15 @@ REDDIT_COM = "https://reddit.com"
 OUTPUT_FNAME = "reddit-posts.json"
 
 subreddits = [
-    "onebag",
+    "comics",
+    "omaha",
+    "omahatech",
     "spacexlounge",
     "spacex",
-    "omaha",
+    "onebag",
     "ExperiencedDevs",
-    "omahatech",
     "solotravel",
     "ultralight",
-    "comics",
 ]
 
 def login():
