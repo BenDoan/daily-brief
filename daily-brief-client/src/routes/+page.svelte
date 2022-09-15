@@ -49,7 +49,7 @@
 
 <section>
 	{#if time}
-	<h1>{months[time.getMonth()]}, {days[time.getDay()]} {time.getDate()}</h1>
+	<h1 title="{time.toLocaleString()}">{months[time.getMonth()]}, {days[time.getDay()]} {time.getDate()}</h1>
 	{/if}
 	{#if redditData}
 		{#each Object.entries(redditData.subreddits) as [subreddit, subredditData]}
