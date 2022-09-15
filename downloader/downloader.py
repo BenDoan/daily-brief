@@ -32,6 +32,9 @@ subreddits = [
     "ultralight",
 ]
 
+def main():
+    download_reddit()
+
 def login():
     basic = HTTPBasicAuth(APP_ID, SECRET)
     headers = {"User-Agent": "DailyBrief/0.1 by coursesuno"}
@@ -100,7 +103,7 @@ def download_image(url: str):
 
 
 
-def main():
+def download_reddit():
     out = {
         "time": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "subreddits": {},
