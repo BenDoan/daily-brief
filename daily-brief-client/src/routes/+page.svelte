@@ -28,7 +28,7 @@
 
 
 	async function fetchAndRedditData() {
-		const req = await fetch('http://localhost:8000/api/data');
+		const req = await fetch('/api/data');
 		redditData = await req.json();
 		const timeStr = redditData.time;
 		time = new Date(timeStr);
