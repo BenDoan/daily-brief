@@ -60,6 +60,8 @@
 			{/each}
 		{/each}
 	{/if}
+
+<iframe src="/img/nyt.pdf#zoom=100&toolbar=0" width="100%" height="2150px" frameborder="0" scrolling="no">
 </section>
 
 <style>

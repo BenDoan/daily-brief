@@ -12,6 +12,7 @@ import shutil
 import sys
 from functools import reduce
 from urllib.parse import urljoin
+from zoneinfo import ZoneInfo
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -33,7 +34,34 @@ subreddits = [
 ]
 
 def main():
-    download_reddit()
+    # download_reddit()
+    download_nyt()
+
+def get_nyt_url(date):
+    return f"https://static01.nyt.com/images/{date.year}/{date.month:02}/{date.day:02}/nytfrontpage/scan.pdf"
+
+def download_nyt():
+    date = datetime.datetime.now(ZoneInfo("America/New_York"))
+    url = get_nyt_url(date)
+
+    r = requests.get(url, stream=True)
+    if r.status_code == 200:
+        write_nyt(r)
+    else:
+        yesterday = date - datetime.timedelta(days=1)
+        new_url = get_nyt_url(yesterday)
+        r2 = requests.get(new_url, stream=True)
+        if r2.status_code == 200:
+            write_nyt(r2)
+        else:
+            eprint("Failed to fetch nyt")
+
+def write_nyt(r):
+    fname = "nyt.pdf"
+    path = os.path.join("..", "data", fname)
+    with open(path, 'wb') as f:
+        r.raw.decode_content = True
+        shutil.copyfileobj(r.raw, f)
 
 def login():
     basic = HTTPBasicAuth(APP_ID, SECRET)
