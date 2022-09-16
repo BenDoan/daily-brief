@@ -41,6 +41,7 @@ def get_nyt_url(date):
     return f"https://static01.nyt.com/images/{date.year}/{date.month:02}/{date.day:02}/nytfrontpage/scan.pdf"
 
 def download_nyt():
+    eprint("Fetching nyt front page")
     date = datetime.datetime.now(ZoneInfo("America/New_York"))
     url = get_nyt_url(date)
 
@@ -58,7 +59,7 @@ def download_nyt():
 
 def write_nyt(r):
     fname = "nyt.pdf"
-    path = os.path.join("..", "data", fname)
+    path = os.path.join("..", "data", "img", fname)
     with open(path, 'wb') as f:
         r.raw.decode_content = True
         shutil.copyfileobj(r.raw, f)
