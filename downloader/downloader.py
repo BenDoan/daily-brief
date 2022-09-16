@@ -34,7 +34,7 @@ subreddits = [
 ]
 
 def main():
-    # download_reddit()
+    download_reddit()
     download_nyt()
 
 def get_nyt_url(date):
