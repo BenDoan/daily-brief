@@ -7,12 +7,17 @@
     - Show site
 		- One post at a time
 		- marker for op
+		- news
+		- weather
+		- better mobile support
 	*/
 
 	import Comment from '$lib/Comment.svelte';
 	import Post from '$lib/Post.svelte';
 	import { reset, currentTime } from '$lib/stores.js';
 
+
+	import { dev } from '$app/environment';
 	import { onMount } from 'svelte';
 
 	const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -28,7 +33,12 @@
 
 
 	async function fetchAndRedditData() {
-		const req = await fetch('/api/data');
+		const url = dev ? 'http://localhost:8000/api/data' : '/api/data'
+		const req = await fetch(url, {
+			headers: {
+				'Authorization': 'Basic Og=='
+			}
+		});
 		redditData = await req.json();
 		const timeStr = redditData.time;
 		time = new Date(timeStr);
@@ -49,7 +59,7 @@
 
 <section>
 	{#if time}
-	<h1 title="{time.toLocaleString()}">{months[time.getMonth()]}, {days[time.getDay()]} {time.getDate()}</h1>
+	<h1 class="title" title="{time.toLocaleString()}">{months[time.getMonth()]}, {days[time.getDay()]} {time.getDate()}</h1>
 	{/if}
 	{#if redditData}
 		{#each Object.entries(redditData.subreddits) as [subreddit, subredditData]}
@@ -61,8 +71,13 @@
 		{/each}
 	{/if}
 
+<!--
 <iframe src="/img/nyt.pdf#zoom=100&toolbar=0" width="100%" height="2150px" frameborder="0" scrolling="no">
+-->
 </section>
 
 <style>
+.title {
+	font-family: serif;
+}
 </style>
