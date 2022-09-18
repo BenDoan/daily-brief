@@ -59,11 +59,12 @@
 
 <section>
 	{#if time}
-	<h1 class="title" title="{time.toLocaleString()}">{months[time.getMonth()]}, {days[time.getDay()]} {time.getDate()}</h1>
+	<h1 class="title">Daily Brief</h1>
+	<h3 class="subtitle" title="{time.toLocaleString()}">{days[time.getDay()]} {months[time.getMonth()]} {time.getDate()} {time.getFullYear()}</h3>
 	{/if}
 	{#if redditData}
 		{#each Object.entries(redditData.subreddits) as [subreddit, subredditData]}
-			<h3>{subreddit}</h3>
+			<h3>/r/{subreddit}</h3>
 
 			{#each subredditData as post}
 				<Post post={post} />
@@ -71,13 +72,24 @@
 		{/each}
 	{/if}
 
-<!--
 <iframe src="/img/nyt.pdf#zoom=100&toolbar=0" width="100%" height="2150px" frameborder="0" scrolling="no">
--->
 </section>
 
 <style>
 .title {
 	font-family: serif;
+	text-align: center;
+	font-size: 35pt;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	font-weight: 1000;
+}
+
+.subtitle {
+	font-size: 12pt;
+	font-family: serif;
+	text-align: center;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 </style>
