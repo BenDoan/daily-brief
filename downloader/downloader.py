@@ -119,7 +119,12 @@ def download_images(posts: list):
             continue
 
         if '.png' in url or '.jpg' in url or '.jpeg' in url:
-            download_image(url)
+            try:
+                download_image(url)
+            except Exception as e:
+                eprint("Failed to download img", url)
+                eprint(e)
+
         download_image(thumb)
 
 def download_image(url: str):
