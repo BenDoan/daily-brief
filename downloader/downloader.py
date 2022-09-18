@@ -119,21 +119,20 @@ def download_images(posts: list):
             continue
 
         if '.png' in url or '.jpg' in url or '.jpeg' in url:
-            try:
                 download_image(url)
-            except Exception as e:
-                eprint("Failed to download img", url)
-                eprint(e)
-
         download_image(thumb)
 
 def download_image(url: str):
-    r = requests.get(url, stream=True)
-    path = os.path.join("..", "data", "img", url.split("/")[-1])
-    if r.status_code == 200:
-        with open(path, 'wb') as f:
-            r.raw.decode_content = True
-            shutil.copyfileobj(r.raw, f)
+    try:
+        r = requests.get(url, stream=True)
+        path = os.path.join("..", "data", "img", url.split("/")[-1])
+        if r.status_code == 200:
+            with open(path, 'wb') as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+    except Exception as e:
+        eprint("Failed to download img", url)
+        eprint(e)
 
 
 
