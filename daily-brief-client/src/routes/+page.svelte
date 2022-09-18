@@ -53,14 +53,13 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+	<title>Daily Brief</title>
 </svelte:head>
 
 <section>
 	{#if time}
 	<h1 class="title">Daily Brief</h1>
-	<h3 class="subtitle" title="{time.toLocaleString()}">{days[time.getDay()]} {months[time.getMonth()]} {time.getDate()} {time.getFullYear()}</h3>
+	<h3 class="subtitle" title="{time.toLocaleString()}">{days[time.getDay()]}, {months[time.getMonth()]} {time.getDate()} {time.getFullYear()}</h3>
 	{/if}
 	{#if redditData}
 		{#each Object.entries(redditData.subreddits) as [subreddit, subredditData]}
