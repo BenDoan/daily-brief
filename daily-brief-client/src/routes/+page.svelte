@@ -15,6 +15,7 @@
 	import Comment from '$lib/Comment.svelte';
 	import Post from '$lib/Post.svelte';
 	import { reset, currentTime } from '$lib/stores.js';
+	import favicon from '$lib/assets/favicon.ico';
 
 
 	import { dev } from '$app/environment';
@@ -54,6 +55,8 @@
 
 <svelte:head>
 	<title>Daily Brief</title>
+	<link rel="icon" href={favicon} />
+
 </svelte:head>
 
 <section>
