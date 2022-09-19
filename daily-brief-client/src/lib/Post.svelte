@@ -8,7 +8,6 @@
 	let is_open = false;
 
 	const data = post[0].data.children[0].data;
-	console.log(data);
 	const url = data.url;
 	const id = data.id;
 
@@ -24,7 +23,7 @@
 </script>
 
 <div class="comments">
-	<h3 class:seen={$seenPosts[id]}>
+	<h2 class:seen={$seenPosts[id]} class="title">
 		<span class="toggle" on:click={handleToggle}>
 			{#if is_open} [-] {:else} [+] {/if}
 		</span>
@@ -34,10 +33,11 @@
 			{data.title}
 		{/if}
 		{#if is_img}[i]{/if}
-</h3>
+</h2>
 	{#if is_open}
 		<div class="meta">
-				&#11014;{data.score} - {data.author}
+			&#11014;{data.score}
+			- {data.author}
 		</div>
 		{#if is_img}
 			<a href="{url}">
@@ -53,6 +53,11 @@
 </div>
 
 <style>
+.title {
+	margin-top: 12px;
+	margin-bottom: 2px;
+}
+
 .toggle {
 	cursor: pointer;
 	user-select: none;
@@ -60,7 +65,6 @@
 
 .img {
 	max-width: 70vw;
-	max-height: 70vh;
 }
 
 .meta {

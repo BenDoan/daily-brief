@@ -24,6 +24,9 @@
 					{#if is_open} [-] {:else} [+] {/if}
 				</span>
 				{data.author}
+				{#if data.is_submitter}
+					[S]
+				{/if}
 			</div>
 
 			{#if is_open}
@@ -44,6 +47,7 @@
 .comment {
 	margin-bottom: 2px;
 	padding: 5px;
+	font-size: 14pt;
 }
 
 .body :global(p) {

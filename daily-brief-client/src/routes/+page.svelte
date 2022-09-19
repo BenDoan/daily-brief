@@ -81,7 +81,7 @@
 .title {
 	font-family: serif;
 	text-align: center;
-	font-size: 35pt;
+	font-size: 40pt;
 	margin-top: 5px;
 	margin-bottom: 5px;
 	font-weight: 1000;
