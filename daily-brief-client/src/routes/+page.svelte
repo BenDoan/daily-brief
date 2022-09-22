@@ -27,13 +27,17 @@
 
 	let redditData = null;
 	let time = null;
+	let hasNyt = false;
+
+	const nytUrl = dev ? 'http://localhost:8000/img/nyt.pdf' : '/img/nyt.pdf'
 
 	onMount(async () => {
-    fetchAndRedditData();
+    fetchAndSetRedditData();
+		fetchNyt();
   });
 
 
-	async function fetchAndRedditData() {
+	async function fetchAndSetRedditData() {
 		const url = dev ? 'http://localhost:8000/api/data' : '/api/data'
 		const req = await fetch(url, {
 			headers: {
@@ -50,6 +54,15 @@
 		}
   }
 
+	async function fetchNyt() {
+		const req = await fetch(nytUrl, {
+			headers: {
+				'Authorization': 'Basic Og=='
+			}
+		});
+		hasNyt = req.status === 200
+  }
+
 
 </script>
 
@@ -61,9 +74,14 @@
 
 <section>
 	{#if time}
-	<h1 class="title">Daily Brief</h1>
-	<h3 class="subtitle" title="{time.toLocaleString()}">{days[time.getDay()]}, {months[time.getMonth()]} {time.getDate()} {time.getFullYear()}</h3>
+		<h1 class="title">Daily Brief</h1>
+		<h3 class="subtitle" title="{time.toLocaleString()}">{days[time.getDay()]}, {months[time.getMonth()]} {time.getDate()} {time.getFullYear()}</h3>
 	{/if}
+
+	{#if hasNyt}
+		<iframe src="{nytUrl}#zoom=100&toolbar=0" width="100%" height="2150px" frameborder="0" scrolling="no" />
+	{/if}
+
 	{#if redditData}
 		{#each Object.entries(redditData.subreddits) as [subreddit, subredditData]}
 			<h3>/r/{subreddit}</h3>
@@ -74,7 +92,6 @@
 		{/each}
 	{/if}
 
-<iframe src="/img/nyt.pdf#zoom=100&toolbar=0" width="100%" height="2150px" frameborder="0" scrolling="no">
 </section>
 
 <style>
