@@ -30,7 +30,12 @@ subreddits = [
     "onebag",
     "ExperiencedDevs",
     "solotravel",
-    "ultralight",
+    "tools",
+    "tolkeinfans",
+    "coffee",
+    "mexicanfood",
+    "cosmere",
+    "brandonsanderson",
 ]
 
 def main():
