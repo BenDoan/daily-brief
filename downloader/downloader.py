@@ -36,6 +36,9 @@ subreddits = [
     "mexicanfood",
     "cosmere",
     "brandonsanderson",
+    "news",
+    "worldnews",
+    "politics",
 ]
 
 def main():
