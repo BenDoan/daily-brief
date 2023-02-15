@@ -31,7 +31,7 @@ subreddits = [
     "ExperiencedDevs",
     "solotravel",
     "tools",
-    "tolkeinfans",
+    "tolkienfans",
     "coffee",
     "mexicanfood",
     "cosmere",
