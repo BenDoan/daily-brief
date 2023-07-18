@@ -157,15 +157,18 @@ def download_reddit():
     }
 
     for subreddit in subreddits:
-        eprint(f"Fetching top posts from /r/{subreddit}")
-        listing = get_listing(subreddit)
-        posts = []
-        for listing_post in listing["data"]["children"]:
-            posts.append(get_post(listing_post))
+        try:
+            eprint(f"Fetching top posts from /r/{subreddit}")
+            listing = get_listing(subreddit)
+            posts = []
+            for listing_post in listing["data"]["children"]:
+                posts.append(get_post(listing_post))
 
-        download_images(posts)
+            download_images(posts)
 
-        out["subreddits"][subreddit] = posts
+            out["subreddits"][subreddit] = posts
+        except Exception as e:
+            print(e)
 
     output_path = os.path.join("..", "data", OUTPUT_FNAME)
     with open(output_path, "w+") as f:
